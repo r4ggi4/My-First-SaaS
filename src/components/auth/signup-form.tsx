@@ -58,6 +58,12 @@ export function SignupForm() {
         user.displayName ?? email.split("@")[0],
       );
 
+      const idToken = await user.getIdToken();
+      await fetch("/api/login", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+
       router.push("/dashboard");
     } catch (err) {
       const message =

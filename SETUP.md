@@ -258,7 +258,6 @@ Where to find them: Stripe Dashboard > Developers > API keys (make sure Test mod
 
 > **Don't have Stripe CLI?** Claude Code can install it for you, or run `winget install Stripe.StripeCLI` (Windows) and restart your terminal.
 
----
 
 ## Module 5: Run Locally + Push to Live
 

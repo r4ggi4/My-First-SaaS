@@ -42,6 +42,24 @@ export async function handleSubscriptionUpdated(
   });
 }
 
+export async function handleInvoicePaid(invoice: Stripe.Invoice) {
+  const customerId = invoice.customer as string;
+  if (!customerId) return;
+
+  const usersSnapshot = await getAdminDb()
+    .collection("users")
+    .where("stripeCustomerId", "==", customerId)
+    .limit(1)
+    .get();
+
+  if (usersSnapshot.empty) return;
+
+  await usersSnapshot.docs[0].ref.update({
+    subscriptionStatus: "active" as SubscriptionStatus,
+    updatedAt: new Date(),
+  });
+}
+
 export async function handleSubscriptionDeleted(
   subscription: Stripe.Subscription,
 ) {

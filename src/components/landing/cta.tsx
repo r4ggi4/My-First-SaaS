@@ -16,10 +16,10 @@ export function CTA() {
           faster than ever. Start for free — no credit card required.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button render={<Link href="/signup" />} size="lg" className="text-base px-8">
+          <Button render={<Link href="/signup" />} nativeButton={false} size="lg" className="text-base px-8">
             Start Free Trial
           </Button>
-          <Button render={<a href="#pricing" />} variant="outline" size="lg" className="text-base px-8">
+          <Button render={<a href="#pricing" />} nativeButton={false} variant="outline" size="lg" className="text-base px-8">
             View Pricing
           </Button>
         </div>

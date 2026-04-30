@@ -76,7 +76,7 @@ export function Pricing() {
               </ul>
             </CardContent>
             <CardFooter>
-              <Button render={<Link href="/signup" />} variant="outline" className="w-full">
+              <Button render={<Link href="/signup" />} nativeButton={false} variant="outline" className="w-full">
                 Get Started
               </Button>
             </CardFooter>
@@ -111,7 +111,7 @@ export function Pricing() {
                   Subscribe
                 </Button>
               ) : (
-                <Button render={<Link href="/signup" />} className="w-full">
+                <Button render={<Link href="/signup" />} nativeButton={false} className="w-full">
                   Sign Up to Subscribe
                 </Button>
               )}

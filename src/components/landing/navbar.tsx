@@ -29,15 +29,15 @@ export function Navbar() {
       {!loading && (
         <>
           {user ? (
-            <Button render={<Link href="/dashboard" />} size="sm">
+            <Button render={<Link href="/dashboard" />} nativeButton={false} size="sm">
               Dashboard
             </Button>
           ) : (
             <>
-              <Button render={<Link href="/login" />} variant="ghost" size="sm">
+              <Button render={<Link href="/login" />} nativeButton={false} variant="ghost" size="sm">
                 Login
               </Button>
-              <Button render={<Link href="/signup" />} size="sm">
+              <Button render={<Link href="/signup" />} nativeButton={false} size="sm">
                 Sign Up
               </Button>
             </>
@@ -89,7 +89,7 @@ export function Navbar() {
                 <>
                   {user ? (
                     <SheetClose render={<span />}>
-                      <Button render={<Link href="/dashboard" />} className="w-full" size="sm">
+                      <Button render={<Link href="/dashboard" />} nativeButton={false} className="w-full" size="sm">
                         Dashboard
                       </Button>
                     </SheetClose>
@@ -98,6 +98,7 @@ export function Navbar() {
                       <SheetClose render={<span />}>
                         <Button
                           render={<Link href="/login" />}
+                          nativeButton={false}
                           variant="ghost"
                           className="w-full"
                           size="sm"
@@ -106,7 +107,7 @@ export function Navbar() {
                         </Button>
                       </SheetClose>
                       <SheetClose render={<span />}>
-                        <Button render={<Link href="/signup" />} className="w-full" size="sm">
+                        <Button render={<Link href="/signup" />} nativeButton={false} className="w-full" size="sm">
                           Sign Up
                         </Button>
                       </SheetClose>

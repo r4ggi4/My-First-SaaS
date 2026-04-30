@@ -4,6 +4,7 @@ import {
   handleCheckoutCompleted,
   handleSubscriptionUpdated,
   handleSubscriptionDeleted,
+  handleInvoicePaid,
 } from "@/lib/stripe/webhooks";
 import type Stripe from "stripe";
 
@@ -45,6 +46,7 @@ export async function POST(request: Request) {
           event.data.object as Stripe.Checkout.Session,
         );
         break;
+      case "customer.subscription.created":
       case "customer.subscription.updated":
         await handleSubscriptionUpdated(
           event.data.object as Stripe.Subscription,
@@ -54,6 +56,9 @@ export async function POST(request: Request) {
         await handleSubscriptionDeleted(
           event.data.object as Stripe.Subscription,
         );
+        break;
+      case "invoice.paid":
+        await handleInvoicePaid(event.data.object as Stripe.Invoice);
         break;
       default:
         console.log(`Unhandled event type: ${event.type}`);

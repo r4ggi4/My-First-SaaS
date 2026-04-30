@@ -8,6 +8,11 @@ export async function createUserDoc(
 ): Promise<void> {
   const ref = doc(getFirebaseDb(), "users", uid);
   await setDoc(ref, {
+    uid,
+    photoURL: null,
+    stripeCustomerId: null,
+    subscriptionStatus: "inactive",
+    subscriptionPriceId: null,
     ...data,
     createdAt: new Date(),
     updatedAt: new Date(),

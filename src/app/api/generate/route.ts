@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         "X-Title": "BlogAI",
       },
       body: JSON.stringify({
-        model: "anthropic/claude-sonnet-4-20250514",
+        model: "anthropic/claude-sonnet-4-6",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },

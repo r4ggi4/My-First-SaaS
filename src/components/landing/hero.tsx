@@ -29,10 +29,10 @@ export function Hero() {
         </p>
 
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button render={<Link href="/signup" />} size="lg" className="text-base px-8">
+          <Button render={<Link href="/signup" />} nativeButton={false} size="lg" className="text-base px-8">
             Start Free Trial
           </Button>
-          <Button render={<a href="#how-it-works" />} variant="outline" size="lg" className="text-base px-8">
+          <Button render={<a href="#how-it-works" />} nativeButton={false} variant="outline" size="lg" className="text-base px-8">
             See How It Works
           </Button>
         </div>
