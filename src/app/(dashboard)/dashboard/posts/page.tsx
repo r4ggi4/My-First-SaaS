@@ -25,9 +25,9 @@ export default function PostsPage() {
     if (!user) return;
     getUserPosts(user.uid)
       .then((p) => setPosts(p.sort((a, b) => {
-        const aTime = a.createdAt instanceof Date ? a.createdAt.getTime() : (a.createdAt as any)?.toMillis?.() ?? 0;
-        const bTime = b.createdAt instanceof Date ? b.createdAt.getTime() : (b.createdAt as any)?.toMillis?.() ?? 0;
-        return bTime - aTime;
+        const toMs = (v: Date | { toMillis?: () => number }) =>
+          v instanceof Date ? v.getTime() : (v as { toMillis?: () => number }).toMillis?.() ?? 0;
+        return toMs(b.createdAt) - toMs(a.createdAt);
       })))
       .finally(() => setLoading(false));
   }, [user]);
@@ -73,7 +73,7 @@ export default function PostsPage() {
                       {new Date(
                         post.createdAt instanceof Date
                           ? post.createdAt
-                          : (post.createdAt as any)?.toDate?.() ?? post.createdAt
+                          : (post.createdAt as { toDate?: () => Date }).toDate?.() ?? post.createdAt
                       ).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "short",

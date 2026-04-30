@@ -196,7 +196,7 @@ export function BlogGenerator() {
         {isAtLimit ? (
           <div className="rounded-lg border border-primary/30 bg-primary/5 p-6 text-center space-y-3">
             <Crown className="h-8 w-8 text-primary mx-auto" />
-            <p className="font-semibold">You've used all 5 free posts this month</p>
+            <p className="font-semibold">You&apos;ve used all 5 free posts this month</p>
             <p className="text-sm text-muted-foreground">Upgrade to Pro for unlimited blog posts, advanced AI, and more.</p>
             <Button onClick={handleUpgrade} disabled={isUpgrading}>
               {isUpgrading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Crown className="mr-2 h-4 w-4" />}
@@ -269,6 +269,7 @@ export function BlogGenerator() {
               <span className="text-sm font-medium leading-none">Cover Image (optional)</span>
               {coverPreview ? (
                 <div className="relative w-full aspect-video rounded-lg overflow-hidden border">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={coverPreview} alt="Cover preview" className="absolute inset-0 w-full h-full object-cover" />
                   <button
                     onClick={handleRemoveImage}
