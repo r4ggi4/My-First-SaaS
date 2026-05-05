@@ -54,12 +54,15 @@ export default function middleware(request: NextRequest) {
     handleInvalidToken: async () => {
       const pathname = request.nextUrl.pathname;
 
-      // Allow public paths without authentication
       if (isPublicPath(pathname)) {
         return NextResponse.next();
       }
 
-      // Redirect unauthenticated users to login for protected paths
+      // API routes get 401 JSON, not a redirect to the login page
+      if (pathname.startsWith("/api/")) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+
       const url = request.nextUrl.clone();
       url.pathname = "/login";
       url.searchParams.set("redirect", pathname);
@@ -68,9 +71,12 @@ export default function middleware(request: NextRequest) {
     handleError: async () => {
       const pathname = request.nextUrl.pathname;
 
-      // On error, allow public paths and redirect protected paths
       if (isPublicPath(pathname)) {
         return NextResponse.next();
+      }
+
+      if (pathname.startsWith("/api/")) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
       }
 
       const url = request.nextUrl.clone();

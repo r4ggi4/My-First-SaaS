@@ -7,18 +7,18 @@ const FREE_DAILY_LIMIT = 5;
 const PRO_DAILY_LIMIT = 50;
 
 export async function POST(request: NextRequest) {
+  // Auth check must come first — never leak config details to unauthenticated callers
+  const uid = request.headers.get("x-user-uid");
+  if (!uid) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
       { error: "OpenRouter API key is not configured" },
       { status: 500 },
     );
-  }
-
-  // Verify the user is authenticated via middleware headers
-  const uid = request.headers.get("x-user-uid");
-  if (!uid) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   let body: { topic: string; tone: string };
