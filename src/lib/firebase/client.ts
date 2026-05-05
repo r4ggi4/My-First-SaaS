@@ -1,3 +1,4 @@
+// Firebase browser SDK — reads NEXT_PUBLIC_* vars at build time
 import {
   initializeApp,
   getApps,
