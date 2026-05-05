@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { authMiddleware } from "next-firebase-auth-edge/lib/next/middleware";
 
-const PUBLIC_PATHS = ["/", "/login", "/signup", "/terms", "/privacy"];
+const PUBLIC_PATHS = ["/", "/login", "/signup", "/terms", "/privacy", "/api/webhooks"];
 
 function isPublicPath(pathname: string): boolean {
   return PUBLIC_PATHS.some(

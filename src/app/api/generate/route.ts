@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Timestamp } from "firebase-admin/firestore";
+import { getAdminDb } from "@/lib/firebase/admin";
 
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+const FREE_DAILY_LIMIT = 5;
+const PRO_DAILY_LIMIT = 50;
 
 export async function POST(request: NextRequest) {
   const apiKey = process.env.OPENROUTER_API_KEY;
@@ -32,6 +36,48 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Rate limiting — check and increment atomically via Firestore transaction
+  const db = getAdminDb();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const userDoc = await db.collection("users").doc(uid).get();
+  const isPro = ["active", "trialing"].includes(
+    userDoc.data()?.subscriptionStatus ?? "",
+  );
+  const dailyLimit = isPro ? PRO_DAILY_LIMIT : FREE_DAILY_LIMIT;
+
+  const rateLimitRef = db.collection("rateLimits").doc(uid);
+  let rateLimited = false;
+
+  await db.runTransaction(async (tx) => {
+    const rl = await tx.get(rateLimitRef);
+    const data = rl.data();
+    const resetAt: Date | undefined = data?.resetAt?.toDate();
+    const count = resetAt && resetAt > today ? (data?.count ?? 0) : 0;
+    if (count >= dailyLimit) {
+      rateLimited = true;
+      return;
+    }
+    tx.set(rateLimitRef, {
+      count: count + 1,
+      resetAt: Timestamp.fromDate(tomorrow),
+    });
+  });
+
+  if (rateLimited) {
+    return NextResponse.json(
+      {
+        error: isPro
+          ? `Daily limit of ${PRO_DAILY_LIMIT} generations reached. Resets at midnight.`
+          : `Daily limit of ${FREE_DAILY_LIMIT} generations reached. Upgrade to Pro for more.`,
+      },
+      { status: 429 },
+    );
+  }
+
   const systemPrompt = `You are an expert blog writer. Write a well-structured, engaging blog post on the given topic. Use the specified tone throughout. Include a compelling title, introduction, multiple sections with headers (use markdown ## for headers), and a conclusion. Aim for around 800-1200 words.`;
 
   const userPrompt = `Write a blog post about: ${topic}\n\nTone: ${tone}`;
@@ -46,7 +92,7 @@ export async function POST(request: NextRequest) {
         "X-Title": "BlogAI",
       },
       body: JSON.stringify({
-        model: "anthropic/claude-sonnet-4-6",
+        model: "anthropic/claude-sonnet-4-20250514",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
