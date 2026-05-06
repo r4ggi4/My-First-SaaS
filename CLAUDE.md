@@ -167,7 +167,7 @@ Tell the user:
 Write into `.env.local`:
 - `OPENROUTER_API_KEY`
 
-Note: The blog generator uses OpenRouter to call `anthropic/claude-sonnet-4-20250514`.
+Note: The blog generator uses OpenRouter to call `anthropic/claude-sonnet-4.6`.
 The API route is at `src/app/api/generate/route.ts`. No other AI config is needed.
 
 #### Stripe
