@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
       const errorText = await response.text();
       console.error("OpenRouter error:", response.status, errorText);
       return NextResponse.json(
-        { error: "Failed to generate blog post. Check your OpenRouter API key and account." },
+        { error: `OpenRouter ${response.status}: ${errorText}` },
         { status: 502 },
       );
     }
