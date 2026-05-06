@@ -12,17 +12,14 @@ function isPublicPath(pathname: string): boolean {
 
 export default function middleware(request: NextRequest) {
   // Skip auth middleware if Firebase is not configured
-  if (
-    !process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
-    !process.env.FIREBASE_ADMIN_PROJECT_ID
-  ) {
+  if (!process.env._FB_API_KEY || !process.env.FIREBASE_ADMIN_PROJECT_ID) {
     return NextResponse.next();
   }
 
   return authMiddleware(request, {
     loginPath: "/api/login",
     logoutPath: "/api/logout",
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    apiKey: process.env._FB_API_KEY,
     cookieName: "__session",
     cookieSignatureKeys: [
       process.env.COOKIE_SECRET_CURRENT ?? "",
