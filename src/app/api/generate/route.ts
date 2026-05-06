@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
         "X-Title": "BlogAI",
       },
       body: JSON.stringify({
-        model: "anthropic/claude-sonnet-4-20250514",
+        model: "anthropic/claude-sonnet-4.6",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
       const errorText = await response.text();
       console.error("OpenRouter error:", response.status, errorText);
       return NextResponse.json(
-        { error: `OpenRouter ${response.status}: ${errorText}` },
+        { error: "Failed to generate blog post. Check your OpenRouter API key and account." },
         { status: 502 },
       );
     }
